@@ -7,6 +7,11 @@ import tensorflow
 import random
 import json
 import pickle
+import flask
+from flask import request, jsonify
+
+app = flask.Flask(__name__)
+app.config["DEBUG"] = True
 
 import nltk
 +nltk.download('punkt')
@@ -100,23 +105,23 @@ def bag_of_words(s, words):
     return numpy.array(bag)
 
 
+@app.route('/chat', methods=['GET'])
 def chat():
-    print("Start talking with the bot (type quit to stop)!")
-    while True:
-        inp = input("You: ")
-        if inp.lower() == "quit":
-            break
 
-        results = model.predict([bag_of_words(inp, words)])
-        results_index = numpy.argmax(results)
-        tag = labels[results_index]
+    if 'message' in request.args:
+        message = str(request.args['message'])
+    else:
+        return "Error: No message field provided. Please specify a message."
 
-        for tg in data["intents"]:
-            if tg['tag'] == tag:
-                responses = tg['responses']
+    results = model.predict([bag_of_words(message, words)])
+    results_index = numpy.argmax(results)
+    tag = labels[results_index]
 
-        #print(results)
-        print(random.choice(responses))
+    for tg in data["intents"]:
+        if tg['tag'] == tag:
+            responses = tg['responses']
 
+    #print(results)
+    return jsonify(random.choice(responses))
 
-chat()
+app.run()
