@@ -11,7 +11,7 @@ import flask
 from flask import request, jsonify
 
 app = flask.Flask(__name__)
-app.config["DEBUG"] = True
+
 
 import nltk
 +nltk.download('punkt')
@@ -85,11 +85,11 @@ net = tflearn.regression(net)
 
 model = tflearn.DNN(net)
 
-try:
-    model.load("model.tflearn")
-except:
-    model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
-    model.save("model.tflearn")
+# try:
+#     model.load("model.tflearn")
+# except:
+model.fit(training, output, n_epoch=1000, batch_size=8, show_metric=True)
+model.save("model.tflearn")
 
 def bag_of_words(s, words):
     bag = [0 for _ in range(len(words))]
@@ -105,9 +105,9 @@ def bag_of_words(s, words):
     return numpy.array(bag)
 
 
-@app.route('/chat', methods=['GET'])
+@app.route('/')
 def chat():
-
+    
     if 'message' in request.args:
         message = str(request.args['message'])
     else:
@@ -121,7 +121,6 @@ def chat():
         if tg['tag'] == tag:
             responses = tg['responses']
 
-    #print(results)
     return jsonify(random.choice(responses))
 
-app.run()
+app.run(debug=True, host='0.0.0.0')
