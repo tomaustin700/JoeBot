@@ -9,9 +9,10 @@ import json
 import pickle
 import flask
 from flask import request, jsonify
+from flask_cors import CORS
 
 app = flask.Flask(__name__)
-
+CORS(app)
 
 import nltk
 +nltk.download('punkt')

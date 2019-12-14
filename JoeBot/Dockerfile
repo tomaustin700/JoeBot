@@ -7,5 +7,6 @@ RUN pip install numpy
 RUN pip install tflearn
 RUN pip install nltk
 RUN pip install flask
+RUN pip install flask_cors
 
 CMD ["python", "./ChatBot.py"]

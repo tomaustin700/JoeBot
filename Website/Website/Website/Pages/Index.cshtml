@@ -26,14 +26,15 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
     <script type="text/javascript">
         // jQuery Document
+        const chatEndPoint = 'http://127.0.0.1:5000/'
         $(document).ready(function () {
             $('#chatbox').append('<div class="msgln"><i>You are chatting with Joe!</i></div>');
 
             $.ajax({
-                url: 'http://127.0.0.1:5000/?message=hello',
+                url: chatEndPoint+'?message=hello',
                 type: "GET",
                 success: function (result) {
-                     $('#chatbox').append('<div class="msgln"> Joe: ' + result + '</div>');
+                    $('#chatbox').append('<div class="msgln"> Joe: ' + result + '</div>');
                 }
             })
 
@@ -49,16 +50,19 @@
             $('#chatbox').append('<div class="msgln"> You: ' + clientmsg + '</div>');
 
             $.ajax({
-                url: 'http://127.0.0.1:5000/?message=' + clientmsg,
+                url: chatEndPoint+'?message=' + clientmsg,
                 type: "GET",
                 success: function (result) {
-                     $('#chatbox').append('<div class="msgln"> Joe: ' + result + '</div>');
+                    $('#chatbox').append('<div class="msgln"> Joe: ' + result + '</div>');
+                    var d = $('#chatbox');
+                    d.scrollTop(d.prop("scrollHeight"));
                 }
             })
 
+
             $("#usermsg").val('');
             $("#usermsg").focus();
-          
+
             return false;
         });
     </script>
