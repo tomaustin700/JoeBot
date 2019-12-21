@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "jobotwebsite.fullname" . }}
+  labels:
+    app: {{ template "jobotwebsite.name" . }}
+    chart: {{ template "jobotwebsite.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ template "jobotwebsite.name" . }}
+    release: {{ .Release.Name }}
